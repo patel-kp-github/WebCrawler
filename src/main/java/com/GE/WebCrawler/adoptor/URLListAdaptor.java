@@ -11,6 +11,9 @@ import com.GE.WebCrawler.service.interfaces.IURLListAdaptorInterface;
 public class URLListAdaptor implements IURLListAdaptorInterface {
 
 	private List<String> validList = new ArrayList<>();
+	private List<String> skippedList = new ArrayList<>();
+	private List<String> inValidList = new ArrayList<>();
+	private List<String> visitedList = new ArrayList<>();
 
 	@Override
 	public List<String> getValidList() {
@@ -27,8 +30,6 @@ public class URLListAdaptor implements IURLListAdaptorInterface {
 		return validList.contains(URL);
 	}
 
-	private List<String> skippedList = new ArrayList<>();
-
 	@Override
 	public List<String> getSkippedList() {
 		return skippedList;
@@ -44,8 +45,6 @@ public class URLListAdaptor implements IURLListAdaptorInterface {
 		return skippedList.contains(URL);
 	}
 
-	private List<String> inValidList = new ArrayList<>();
-
 	@Override
 	public List<String> getInValidList() {
 		return inValidList;
@@ -60,8 +59,6 @@ public class URLListAdaptor implements IURLListAdaptorInterface {
 	public boolean containsInValidList(String URL) {
 		return inValidList.contains(URL);
 	}
-
-	private List<String> visitedList = new ArrayList<>();
 
 	@Override
 	public List<String> getVisitedList() {
