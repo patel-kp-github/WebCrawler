@@ -11,24 +11,25 @@ import org.springframework.stereotype.Service;
 
 import com.GE.WebCrawler.Utils.Constants;
 import com.GE.WebCrawler.service.interfaces.IHttpBaseApiService;
+import com.GE.WebCrawler.service.interfaces.ILoggerInterface;
+import com.GE.WebCrawler.service.interfaces.IURLListAdaptorInterface;
 import com.GE.WebCrawler.service.interfaces.IWebPageProcessor;
 
 @Service
 public class WebPageProcessorImpl implements IWebPageProcessor {
 
 	@Autowired
+	private ILoggerInterface iLoggerInterface;
+
+	@Autowired
+	private IURLListAdaptorInterface adaptor;
+
+	@Autowired
 	IHttpBaseApiService iHttpBaseApiService;
-
-	private List<String> validList = new ArrayList<>();
-
-	private List<String> skippedList = new ArrayList<>();
-
-	private List<String> inValidList = new ArrayList<>();
-
-	private List<String> visitedList = new ArrayList<>();
 
 	@Override
 	public Map<String, List<String>> processRequestPages(Map<String, List> internetInput) {
+		iLoggerInterface.info(internetInput);
 		List<Map> pageList = internetInput.containsKey(Constants.PAGES) ? internetInput.get(Constants.PAGES)
 				: Collections.emptyList();
 		for (Map addressMap : pageList) {
@@ -39,60 +40,52 @@ public class WebPageProcessorImpl implements IWebPageProcessor {
 			addressMap = null;
 		}
 		pageList = null;
-		return response();
-	}
-
-	private Map<String, List<String>> response() {
-
 		Map<String, List<String>> output = new HashMap<>();
-		output.put("Success", validList);
-		output.put("Skipped", skippedList);
-		output.put("Error", inValidList);
-		validList = null;
-		skippedList = null;
-		inValidList = null;
+		output.put("Success", adaptor.getValidList());
+		output.put("Skipped", adaptor.getSkippedList());
+		output.put("Error", adaptor.getInValidList());
 		return output;
 	}
 
 	private void validateLink(String URL) {
 		if (!isVisitedURL(URL)) {
 			if (validURL(URL))
-				validList.add(URL);
+				adaptor.addValidList(URL);
 			else
-				inValidList.add(URL);
+				adaptor.addInValidList(URL);
 		} else {
 			if (availableInValid(URL))
 				if (!availableInSkipped(URL))
-					skippedList.add(URL);
+					adaptor.addSkippedList(URL);
 		}
 	}
 
 	private boolean isVisitedURL(String uRL) {
-		if (visitedList.contains(uRL))
+		if (adaptor.containsVisitedList(uRL))
 			return true;
 		return false;
 	}
 
 	private boolean availableInInValid(String uRL) {
-		if (inValidList.contains(uRL))
+		if (adaptor.containsInValidList(uRL))
 			return true;
 		return false;
 	}
 
 	private boolean availableInSkipped(String uRL) {
-		if (skippedList.contains(uRL))
+		if (adaptor.containsSkippedList(uRL))
 			return true;
 		return false;
 	}
 
 	private boolean availableInValid(String uRL) {
-		if (validList.contains(uRL))
+		if (adaptor.containsValidList(uRL))
 			return true;
 		return false;
 	}
 
 	private boolean validURL(String URL) {
-		visitedList.add(URL);
+		adaptor.addVisitedList(URL);
 		return iHttpBaseApiService.IsValidPage(URL);
 	}
 
