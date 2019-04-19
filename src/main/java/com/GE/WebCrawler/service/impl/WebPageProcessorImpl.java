@@ -36,16 +36,18 @@ public class WebPageProcessorImpl implements IWebPageProcessor {
 			validateLink(URL);
 			List<String> links = (List<String>) addressMap.get(Constants.LINKES);
 			links.stream().forEach((Link) -> validateLink(Link));
+			addressMap = null;
 		}
+		pageList = null;
 		return response();
 	}
 
 	private Map<String, List<String>> response() {
 
 		Map<String, List<String>> output = new HashMap<>();
-		output.put("Success:", validList);
-		output.put("Skipped:", skippedList);
-		output.put("Error:", inValidList);
+		output.put("Success", validList);
+		output.put("Skipped", skippedList);
+		output.put("Error", inValidList);
 		validList = null;
 		skippedList = null;
 		inValidList = null;
