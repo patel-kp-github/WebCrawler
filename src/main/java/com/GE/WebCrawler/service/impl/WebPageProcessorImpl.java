@@ -46,6 +46,9 @@ public class WebPageProcessorImpl implements IWebPageProcessor {
 		output.put("Success:", validList);
 		output.put("Skipped:", skippedList);
 		output.put("Error:", inValidList);
+		validList = null;
+		skippedList = null;
+		inValidList = null;
 		return output;
 	}
 
