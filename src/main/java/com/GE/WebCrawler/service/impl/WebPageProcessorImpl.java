@@ -35,15 +35,12 @@ public class WebPageProcessorImpl implements IWebPageProcessor {
 			String URL = (String) addressMap.get(Constants.ADDRESS);
 			validateLink(URL);
 			List<String> links = (List<String>) addressMap.get(Constants.LINKES);
-			for (String Link : links) {
-				validateLink(URL);
-			}
-
+			links.stream().forEach((Link) -> validateLink(Link));
 		}
-		return prepareOutput();
+		return response();
 	}
 
-	private Map<String, List<String>> prepareOutput() {
+	private Map<String, List<String>> response() {
 
 		Map<String, List<String>> output = new HashMap<>();
 		output.put("Success:", validList);
