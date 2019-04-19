@@ -7,16 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.GE.WebCrawler.service.Processor;
+import com.GE.WebCrawler.service.interfaces.IWebPageProcessor;
 
 @RestController
 @RequestMapping("/crawl")
 public class CrawlController {
 
 	@Autowired
-	Processor process;
+	IWebPageProcessor process;
 	
 	@RequestMapping("/hello")
 	public String helloMethod() {
@@ -29,8 +30,9 @@ public class CrawlController {
 		return process.processRequestPages(internetInput);
 	}
 
-	@RequestMapping("/parse/{URL}")
-	public Map<String, List<String>> crawlController(@PathVariable("URL") String URL) {
+	@RequestMapping("/parse/URL")
+	public Map<String, List<String>> crawlController(@RequestParam("URL") String URL) {
+		System.out.println("crawlController  URL.........."+URL);
 		return process.processSinglePage(URL);
 	}
 

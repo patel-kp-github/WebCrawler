@@ -1,4 +1,4 @@
-package com.GE.WebCrawler.serviceimpl;
+package com.GE.WebCrawler.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,23 +26,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.xml.sax.ContentHandler;
 
-import com.GE.WebCrawler.service.HttpClientService;
-import com.GE.WebCrawler.service.ParserService;
+import com.GE.WebCrawler.service.interfaces.IHttpBaseApiService;
+import com.GE.WebCrawler.service.interfaces.IHttpClientService;
+import com.GE.WebCrawler.service.interfaces.IPageListDataService;
+import com.GE.WebCrawler.service.interfaces.IWebPageParserService;;
 
 @Service
-public class ParserServiceImpl implements ParserService {
+public class WebPageParserServiceImpl implements IWebPageParserService, IHttpBaseApiService {
 
 	@Autowired
-	HttpClientService HttpClientService;
+	IPageListDataService implPageListDataService;
+	@Autowired
+	IHttpBaseApiService implHttpBaseApiService;
 
 	@Override
-	public boolean IsValid(String URL) {
-		return HttpClientService.IsValidPage(URL);
+	public boolean IsValidPage(String URL) {
+		System.out.println("check:" + implHttpBaseApiService.HttpRequestHandler(URL));
+		return implHttpBaseApiService.IsValidPage(URL);
 	}
 
 	@Override
 	public List<String> parsePage(String URL) {
-		return HttpClientService.getListOfLinks(URL);
+		return implPageListDataService.getListOfLinks(URL);
+	}
+
+	@Override
+	public boolean HttpRequestHandler(String URL) {
+		// TODO Auto-generated method stub
+		return implHttpBaseApiService.HttpRequestHandler(URL);
 	}
 
 }
