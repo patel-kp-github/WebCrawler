@@ -9,6 +9,8 @@ process it and returns response. Input request file is given in resource folder,
 How to run:-
 com.GE.WebCrawler.Controller.WebServiceApplication class is the initial point to run the application.
 
+REST API: 
+GET: localhost:8080/crawl
  
 Sample request:
 
